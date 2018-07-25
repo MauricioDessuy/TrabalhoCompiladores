@@ -55,7 +55,7 @@ public class ShiftReduce {
         }
         return res;
     }
-    
+
     public static boolean tentaReduzir() {
         int count = 0;
         boolean res = false;
@@ -69,7 +69,7 @@ public class ShiftReduce {
         }
         return res;
     }
-    
+
     public static boolean shiftReduce() {
         int iter = 0;
         while (true) {
@@ -90,16 +90,19 @@ public class ShiftReduce {
             }
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        pilha_e = "";
-        pilha_d = "i*i";
-        System.out.println(shiftReduce() ? "Aceita" : "Rejeita");
-        //System.out.println(ehInicioRegra());
-        //System.out.println(reduz("T*F"));
+        Lexico lexico = new Lexico("12*3.2");
+        String expressao = lexico.analise();
+        if (!expressao.isEmpty()) {
+            System.out.println("Certo");
+            pilha_e = "";
+            pilha_d = expressao;
+            System.out.println(shiftReduce() ? "Aceita" : "Rejeita");
+        }
     }
 
 }
