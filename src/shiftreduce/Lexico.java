@@ -26,9 +26,17 @@ public class Lexico {
             if (estado == 0) {
                 String s = fonte.substring(0, 1);
                 if(s.charAt(0) >= '0' && s.charAt(0) <='9'){
-                    estado = 1;
+                    estado = 0;
+                    resultado = resultado + s;
+                    fonte = fonte.substring(1);
                 }
-                
+                else if (s.equals(".")) {
+                    estado = 1;
+                    resultado = resultado + s;
+                    fonte = fonte.substring(1);
+                } else {
+                    return resultado;
+                }
             }
         }
         
