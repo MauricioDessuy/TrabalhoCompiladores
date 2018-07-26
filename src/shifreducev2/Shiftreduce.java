@@ -1,9 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shifreducev2;
+
+import java.util.regex.Pattern;
 
 /**
  *
@@ -16,7 +13,10 @@ public class Shiftreduce {
     {"F", "(E)", "i"}};
     public String pilha_E = "";
     public String pilha_D = "i*i";
-
+    public String pilhaNumeros_E = "";
+    public String pilhaNumeros_D = "";
+    public String[] vetorNumeros;
+    
     public void transfere() {
         if (pilha_D.length() > 0) {
             pilha_E = pilha_E + pilha_D.substring(0, 1);
@@ -104,13 +104,32 @@ public class Shiftreduce {
 
     }
 
+    private void trocarNumerosPorId(String expressao, Shiftreduce sr) {
+        char[] letras = expressao.toCharArray();
+        for (char letra : letras) {
+            if (Character.isDigit(letra)) {
+                sr.pilhaNumeros_D += letra;
+            } else {
+                if (!sr.pilhaNumeros_D.endsWith("|")) {
+                    sr.pilhaNumeros_D += "|";
+                }
+            }
+        }
+        sr.vetorNumeros = sr.pilhaNumeros_D.split(Pattern.quote("|"));
+    }
+    
     public static void main(String[] args) {
-        Lexico lexico = new Lexico("12*3.2+15*3+(2+7)");
+        String expr = "20*3+1";
+        Lexico lexico = new Lexico(expr);
         String expressao = lexico.analise();
         if (expressao.length() > 0) {
             Shiftreduce sr = new Shiftreduce();
             sr.pilha_E = "";
             sr.pilha_D = expressao;
+            sr.pilhaNumeros_E = "";
+            sr.pilhaNumeros_D = "";
+            sr.trocarNumerosPorId(expr, sr);
+            System.out.println(sr.pilhaNumeros_D);
             if (sr.shiftreduce()) {
                 System.out.println("aceita!!!");
             } else {
@@ -118,5 +137,4 @@ public class Shiftreduce {
             }
         }
     }
-
 }

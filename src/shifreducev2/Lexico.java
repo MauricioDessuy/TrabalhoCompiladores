@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shifreducev2;
 
 /**
@@ -27,48 +22,53 @@ public class Lexico {
                 s = fonte.substring(i, i + 1);
             }
             System.out.println("ëstado:" + String.valueOf(estado));
-            if (estado == 0) {
-                if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
-                    estado = 1;
-                    res = res + s;
-                    i++;
-                } else {
-                    return "";
-                }
-            } else if (estado == 1) {
-                if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
-                    estado = 1;
-                    res = res + s;
-                    i++;
-                } else if (s.equals(".")) {
-                    estado = 2;
-                    res = res + s;
-                    i++;
-                } else {
-                    estado = 4;
-                }
-
-            } else if (estado == 2) {
-                if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
-                    estado = 3;
-                    res = res + s;
-                    i++;
-                } else {
-                    return "";
-                }
-
-            } else if (estado == 3) {
-                if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
-                    estado = 3;
-                    res = res + s;
-                    i++;
-                } else {
-                    estado = 4;
-                }
-            } else if (estado == 4) {
-                fonte = fonte.substring(i);
-                System.out.println(res);
-                return res;
+            switch (estado) {
+                case 0:
+                    if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
+                        estado = 1;
+                        res = res + s;
+                        i++;
+                    } else {
+                        return "";
+                    }
+                    break;
+                case 1:
+                    if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
+                        estado = 1;
+                        res = res + s;
+                        i++;
+                    } else if (s.equals(".")) {
+                        estado = 2;
+                        res = res + s;
+                        i++;
+                    } else {
+                        estado = 4;
+                    }
+                    break;
+                case 2:
+                    if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
+                        estado = 3;
+                        res = res + s;
+                        i++;
+                    } else {
+                        return "";
+                    }
+                    break;
+                case 3:
+                    if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
+                        estado = 3;
+                        res = res + s;
+                        i++;
+                    } else {
+                        estado = 4;
+                    }
+                    break;
+                case 4:
+                    fonte = fonte.substring(i);
+                    System.out.println(res);
+                    return res;
+                default:
+                    break;
             }
 
             if (fonte.length() == 0) {
@@ -83,7 +83,7 @@ public class Lexico {
         String res = "";
         String s = fonte.substring(0, 1);
         if (s.equals("+") || s.equals("*") || s.equals("(") || s.equals(")")) {
-            res = res + s;
+            res += s;
             fonte = fonte.substring(1);
             return s;
         } else {
