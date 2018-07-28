@@ -1,5 +1,6 @@
 package shifreducev2;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -8,15 +9,17 @@ import java.util.regex.Pattern;
  */
 public class Shiftreduce {
 
-    public String[][] gramatica = {{"E", "E+T", "T"},
-    {"T", "T*F", "F"},
-    {"F", "(E)", "i"}};
+    public String[][] gramatica = {{"E", "E+T", "E-T", "T"},
+    {"T", "T*F", "T/F", "F"},
+    {"F", "(E)", "i", ""}};
     public String pilha_E = "";
     public String pilha_D = "i*i";
     public String pilhaNumeros_E = "";
     public String pilhaNumeros_D = "";
     public String[] vetorNumeros;
-    
+    private HashMap<Integer, String> mapaNumeros = new HashMap();
+    private int indices = 0;
+
     public void transfere() {
         if (pilha_D.length() > 0) {
             pilha_E = pilha_E + pilha_D.substring(0, 1);
@@ -55,6 +58,7 @@ public class Shiftreduce {
         for (String[] regra : gramatica) {
             for (int i = 1; i < regra.length; i++) {
                 if (expressao.equals(regra[i])) {
+                    
                     res = regra[0];
                 }
             }
@@ -65,13 +69,10 @@ public class Shiftreduce {
     public boolean tenta_reduzir() {
         boolean res = false;
         int cont = 0;
-        while ((res == false) && (cont < pilha_E.length())) {
-            String reducao = reduz(
-                    pilha_E.substring(cont));
+        while (!res && (cont < pilha_E.length())) {
+            String reducao = reduz(pilha_E.substring(cont));
             if (!(reducao.equals(""))) {
-                pilha_E = pilha_E.substring(0, cont)
-                        + reducao;
-
+                pilha_E = pilha_E.substring(0, cont) + reducao;
                 res = true;
             }
             cont++;
@@ -84,20 +85,17 @@ public class Shiftreduce {
         while (true) {
             iter++;
             int tam_pilhaD = pilha_D.length();
-            System.out.println("iter:"
-                    + String.valueOf(iter)
-                    + " $" + pilha_E + "   " + pilha_D + "$");
+            System.out.println("iter:" + String.valueOf(iter) + " $" + pilha_E + "   " + pilha_D + "$");
             boolean reduziu = false;
             if (eh_inicio_de_regra() >= 0) {
                 transfere();
             } else {
                 reduziu = tenta_reduzir();
-                if (reduziu == false) {
+                if (!reduziu) {
                     transfere();
                 }
             }
-            if ((tam_pilhaD == 0)
-                    && (reduziu == false)) {
+            if ((tam_pilhaD == 0) && !reduziu) {
                 return pilha_E.equals(gramatica[0][0]);
             }
         }
@@ -116,10 +114,14 @@ public class Shiftreduce {
             }
         }
         sr.vetorNumeros = sr.pilhaNumeros_D.split(Pattern.quote("|"));
+        Integer index = 0;
+        for (String vetorNumero : sr.vetorNumeros) {
+            mapaNumeros.put(index++, vetorNumero);
+        }
     }
-    
+
     public static void main(String[] args) {
-        String expr = "20*3+1";
+        String expr = "3+1";
         Lexico lexico = new Lexico(expr);
         String expressao = lexico.analise();
         if (expressao.length() > 0) {

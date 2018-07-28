@@ -21,7 +21,7 @@ public class Lexico {
             if (i < fonte.length()) {
                 s = fonte.substring(i, i + 1);
             }
-            System.out.println("ëstado:" + String.valueOf(estado));
+            System.out.println("Estado:" + String.valueOf(estado));
             switch (estado) {
                 case 0:
                     if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
@@ -82,7 +82,7 @@ public class Lexico {
     public String reconhece_operador() {
         String res = "";
         String s = fonte.substring(0, 1);
-        if (s.equals("+") || s.equals("*") || s.equals("(") || s.equals(")")) {
+        if (s.equals("+") || s.equals("*") || s.equals("(") || s.equals(")") || s.equals("-") || s.equals("/")) {
             res += s;
             fonte = fonte.substring(1);
             return s;
