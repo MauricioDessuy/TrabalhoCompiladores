@@ -1,6 +1,6 @@
 package shifreducev2;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 /**
@@ -11,19 +11,26 @@ public class Shiftreduce {
 
     public String[][] gramatica = {{"E", "E+T", "E-T", "T"},
     {"T", "T*F", "T/F", "F"},
-    {"F", "(E)", "i", ""}};
+    {"F", "(E)", "i"}};
     public String pilha_E = "";
     public String pilha_D = "i*i";
     public String pilhaNumeros_E = "";
     public String pilhaNumeros_D = "";
-    public String[] vetorNumeros;
-    private HashMap<Integer, String> mapaNumeros = new HashMap();
-    private int indices = 0;
+    public String[] vetorNumeros_E;
+    public String[] vetorNumeros_D;
+    private ArrayList<Integer> listaNumeros_D = new ArrayList();
+    private ArrayList<Integer> listaNumeros_E = new ArrayList();
 
     public void transfere() {
         if (pilha_D.length() > 0) {
-            pilha_E = pilha_E + pilha_D.substring(0, 1);
+            String valorTransferido = pilha_D.substring(0, 1);
+            pilha_E = pilha_E + valorTransferido;
             pilha_D = pilha_D.substring(1);
+            if (!listaNumeros_D.isEmpty() && valorTransferido.equals("i")) {
+                Integer numero = listaNumeros_D.get(0);
+                listaNumeros_E.add(numero);
+                listaNumeros_D.remove(0);
+            }
         }
     }
 
@@ -35,14 +42,11 @@ public class Shiftreduce {
         int res = -1;
         int cont = 0;
         while ((res < 0) && (cont < pilha_E.length())) {
-            String s = pilha_E.substring(cont)
-                    + pilha_D.substring(0, 1);
+            String s = pilha_E.substring(cont) + pilha_D.substring(0, 1);
             for (String[] regra : gramatica) {
                 for (int i = 1; i < regra.length; i++) {
                     if (regra[i].length() >= s.length()) {
-                        if (s.equals(
-                                regra[i].substring(
-                                        0, s.length()))) {
+                        if (s.equals(regra[i].substring(0, s.length()))) {
                             res = cont;
                         }
                     }
@@ -58,7 +62,9 @@ public class Shiftreduce {
         for (String[] regra : gramatica) {
             for (int i = 1; i < regra.length; i++) {
                 if (expressao.equals(regra[i])) {
-                    
+                    if (expressao.length() > 2 && !expressao.contains("(")) {
+                        calcularOperacoes(expressao);
+                    }
                     res = regra[0];
                 }
             }
@@ -66,6 +72,39 @@ public class Shiftreduce {
         return res;
     }
 
+    public void calcularOperacoes(String expressao) {
+        //System.out.println("Expressao: " + expressao);
+        Integer primeiro = listaNumeros_E.get(listaNumeros_E.size() - 2);
+        //System.out.println("Primeiro: " + primeiro);
+        Integer segundo = listaNumeros_E.get(listaNumeros_E.size() - 1);
+//        System.out.println("Segundo: " + segundo);
+//        System.out.println("Lista antes: " + listaNumeros_E);
+        listaNumeros_E.remove(listaNumeros_E.size() - 1);
+//        System.out.println("Lista dps primeira remocao: " + listaNumeros_E);
+        listaNumeros_E.remove(listaNumeros_E.size() - 1);
+//        System.out.println("Lista dps segunda remocao: " + listaNumeros_E);
+        Integer resultado = 0;
+        switch (expressao.charAt(1)) {
+            case '*':
+                resultado = primeiro * segundo;
+                listaNumeros_E.add(resultado);
+                break;
+            case '+':
+                resultado = primeiro + segundo;
+                listaNumeros_E.add(resultado);
+                break;
+            case '-':
+                resultado = primeiro - segundo;
+                listaNumeros_E.add(resultado);
+                break;
+            case '/':
+                resultado = primeiro / segundo;
+                listaNumeros_E.add(resultado);
+                break;
+        }
+//        System.out.println("Lista dps add result: " + listaNumeros_E);
+    }
+    
     public boolean tenta_reduzir() {
         boolean res = false;
         int cont = 0;
@@ -85,7 +124,7 @@ public class Shiftreduce {
         while (true) {
             iter++;
             int tam_pilhaD = pilha_D.length();
-            System.out.println("iter:" + String.valueOf(iter) + " $" + pilha_E + "   " + pilha_D + "$");
+            //System.out.println("iter:" + String.valueOf(iter) + " $" + pilha_E + "   " + pilha_D + "$");
             boolean reduziu = false;
             if (eh_inicio_de_regra() >= 0) {
                 transfere();
@@ -108,20 +147,19 @@ public class Shiftreduce {
             if (Character.isDigit(letra)) {
                 sr.pilhaNumeros_D += letra;
             } else {
-                if (!sr.pilhaNumeros_D.endsWith("|")) {
+                if (!sr.pilhaNumeros_D.endsWith("|") && !sr.pilhaNumeros_D.isEmpty()) {
                     sr.pilhaNumeros_D += "|";
                 }
             }
         }
-        sr.vetorNumeros = sr.pilhaNumeros_D.split(Pattern.quote("|"));
-        Integer index = 0;
-        for (String vetorNumero : sr.vetorNumeros) {
-            mapaNumeros.put(index++, vetorNumero);
+        sr.vetorNumeros_D = sr.pilhaNumeros_D.split(Pattern.quote("|"));
+        for (String vetorNumero : sr.vetorNumeros_D) {
+            listaNumeros_D.add(Integer.valueOf(vetorNumero));
         }
     }
 
     public static void main(String[] args) {
-        String expr = "3+1";
+        String expr = "((5+2*3-4)/7)*4-2";
         Lexico lexico = new Lexico(expr);
         String expressao = lexico.analise();
         if (expressao.length() > 0) {
@@ -131,8 +169,8 @@ public class Shiftreduce {
             sr.pilhaNumeros_E = "";
             sr.pilhaNumeros_D = "";
             sr.trocarNumerosPorId(expr, sr);
-            System.out.println(sr.pilhaNumeros_D);
             if (sr.shiftreduce()) {
+                System.out.println("Resultado: " + sr.listaNumeros_E);
                 System.out.println("aceita!!!");
             } else {
                 System.out.println("rejeita!!!");

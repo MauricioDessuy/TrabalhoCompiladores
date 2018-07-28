@@ -21,7 +21,7 @@ public class Lexico {
             if (i < fonte.length()) {
                 s = fonte.substring(i, i + 1);
             }
-            System.out.println("Estado:" + String.valueOf(estado));
+            //SSystem.out.println("Estado:" + String.valueOf(estado));
             switch (estado) {
                 case 0:
                     if ((s.charAt(0) >= '0') && (s.charAt(0) <= '9')) {
@@ -65,7 +65,7 @@ public class Lexico {
                     break;
                 case 4:
                     fonte = fonte.substring(i);
-                    System.out.println(res);
+                    //System.out.println(res);
                     return res;
                 default:
                     break;
