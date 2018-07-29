@@ -20,6 +20,7 @@ public class Shiftreduce {
     public String[] vetorNumeros_D;
     private ArrayList<Integer> listaNumeros_D = new ArrayList();
     private ArrayList<Integer> listaNumeros_E = new ArrayList();
+    private static ArrayList<String> expressoes = new ArrayList();
 
     public void transfere() {
         if (pilha_D.length() > 0) {
@@ -73,12 +74,11 @@ public class Shiftreduce {
     }
 
     public void calcularOperacoes(String expressao) {
-        //System.out.println("Expressao: " + expressao);
+        System.out.println("Expressao: " + expressao);
+        expressoes.add(expressao);
         Integer primeiro = listaNumeros_E.get(listaNumeros_E.size() - 2);
-        //System.out.println("Primeiro: " + primeiro);
         Integer segundo = listaNumeros_E.get(listaNumeros_E.size() - 1);
-//        System.out.println("Segundo: " + segundo);
-//        System.out.println("Lista antes: " + listaNumeros_E);
+        System.out.println("Lista antes: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
 //        System.out.println("Lista dps primeira remocao: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
@@ -102,7 +102,7 @@ public class Shiftreduce {
                 listaNumeros_E.add(resultado);
                 break;
         }
-//        System.out.println("Lista dps add result: " + listaNumeros_E);
+        System.out.println("Lista dps add result: " + listaNumeros_E);
     }
     
     public boolean tenta_reduzir() {
@@ -124,7 +124,6 @@ public class Shiftreduce {
         while (true) {
             iter++;
             int tam_pilhaD = pilha_D.length();
-            //System.out.println("iter:" + String.valueOf(iter) + " $" + pilha_E + "   " + pilha_D + "$");
             boolean reduziu = false;
             if (eh_inicio_de_regra() >= 0) {
                 transfere();
@@ -159,6 +158,7 @@ public class Shiftreduce {
     }
 
     public static void main(String[] args) {
+        boolean aceita = true;
         String expr = "((5+2*3-4)/7)*4-2";
         Lexico lexico = new Lexico(expr);
         String expressao = lexico.analise();
@@ -172,6 +172,8 @@ public class Shiftreduce {
             if (sr.shiftreduce()) {
                 System.out.println("Resultado: " + sr.listaNumeros_E);
                 System.out.println("aceita!!!");
+                JCompilador jCompilador = new JCompilador(sr.listaNumeros_E, aceita, expr, expressoes, sr.gramatica);
+                jCompilador.setVisible(true);
             } else {
                 System.out.println("rejeita!!!");
             }

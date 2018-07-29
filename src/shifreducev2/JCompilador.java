@@ -5,6 +5,8 @@
  */
 package shifreducev2;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author MatthiasT
@@ -13,9 +15,22 @@ public class JCompilador extends javax.swing.JFrame {
 
     /**
      * Creates new form JCompilador
+     * @param resultados contendo o resultado da operação
      */
-    public JCompilador() {
+    public JCompilador(ArrayList<Integer> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
         initComponents();
+        setarValores(resultados, aceita, expressaoNumeros, expressoes, gramatica);
+    }
+    
+    public void setarValores(ArrayList<Integer> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
+        for (Integer resultado : resultados) {
+            jTextField_Resultado.setText(resultado.toString());
+            for (String expressão : expressoes) {
+                jTextArea_ExecucaoOperacoes.append(expressão + "\n");
+            }
+            jTextArea_ExpressaoComNumeros.setText(expressaoNumeros);
+            jLabel_Aceita.setVisible(aceita);
+        }
     }
 
     /**
@@ -27,20 +42,70 @@ public class JCompilador extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel_Content = new javax.swing.JPanel();
+        jPanel_Gramatica = new javax.swing.JPanel();
+        jPanel_ExpressaoNumeros = new javax.swing.JPanel();
+        jScrollPane_ExpressaoComNumeros = new javax.swing.JScrollPane();
+        jTextArea_ExpressaoComNumeros = new javax.swing.JTextArea();
+        jPanel_ExecucaoOperacoes = new javax.swing.JPanel();
+        jScrollPane_ExecucaoOperacoes = new javax.swing.JScrollPane();
+        jTextArea_ExecucaoOperacoes = new javax.swing.JTextArea();
+        jPanel_Resultado = new javax.swing.JPanel();
+        jLabel_Resultado = new javax.swing.JLabel();
+        jTextField_Resultado = new javax.swing.JTextField();
+        jPanel_Buttons = new javax.swing.JPanel();
+        jLabel_Aceita = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel_Content.setLayout(new javax.swing.BoxLayout(jPanel_Content, javax.swing.BoxLayout.PAGE_AXIS));
 
-        pack();
+        jPanel_Gramatica.setLayout(new java.awt.FlowLayout(0, 5, 1));
+        jPanel_Content.add(jPanel_Gramatica);
+
+        jPanel_ExpressaoNumeros.setBorder(javax.swing.BorderFactory.createTitledBorder("Expressão com números"));
+        jPanel_ExpressaoNumeros.setLayout(new java.awt.BorderLayout());
+
+        jTextArea_ExpressaoComNumeros.setColumns(20);
+        jTextArea_ExpressaoComNumeros.setRows(5);
+        jScrollPane_ExpressaoComNumeros.setViewportView(jTextArea_ExpressaoComNumeros);
+
+        jPanel_ExpressaoNumeros.add(jScrollPane_ExpressaoComNumeros, java.awt.BorderLayout.CENTER);
+
+        jPanel_Content.add(jPanel_ExpressaoNumeros);
+
+        jPanel_ExecucaoOperacoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Execução Operações"));
+        jPanel_ExecucaoOperacoes.setLayout(new java.awt.BorderLayout());
+
+        jTextArea_ExecucaoOperacoes.setColumns(20);
+        jTextArea_ExecucaoOperacoes.setRows(5);
+        jScrollPane_ExecucaoOperacoes.setViewportView(jTextArea_ExecucaoOperacoes);
+
+        jPanel_ExecucaoOperacoes.add(jScrollPane_ExecucaoOperacoes, java.awt.BorderLayout.CENTER);
+
+        jPanel_Content.add(jPanel_ExecucaoOperacoes);
+
+        jPanel_Resultado.setLayout(new java.awt.FlowLayout(0, 5, 1));
+
+        jLabel_Resultado.setText("Resultado:");
+        jPanel_Resultado.add(jLabel_Resultado);
+
+        jTextField_Resultado.setPreferredSize(new java.awt.Dimension(120, 20));
+        jPanel_Resultado.add(jTextField_Resultado);
+
+        jPanel_Content.add(jPanel_Resultado);
+
+        getContentPane().add(jPanel_Content, java.awt.BorderLayout.CENTER);
+
+        jPanel_Buttons.setLayout(new java.awt.FlowLayout(1, 5, 1));
+
+        jLabel_Aceita.setText("Aceita");
+        jPanel_Buttons.add(jLabel_Aceita);
+
+        getContentPane().add(jPanel_Buttons, java.awt.BorderLayout.SOUTH);
+
+        setSize(new java.awt.Dimension(416, 339));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -73,11 +138,24 @@ public class JCompilador extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JCompilador().setVisible(true);
+                new JCompilador(null, false, "", null, null).setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel_Aceita;
+    private javax.swing.JLabel jLabel_Resultado;
+    private javax.swing.JPanel jPanel_Buttons;
+    private javax.swing.JPanel jPanel_Content;
+    private javax.swing.JPanel jPanel_ExecucaoOperacoes;
+    private javax.swing.JPanel jPanel_ExpressaoNumeros;
+    private javax.swing.JPanel jPanel_Gramatica;
+    private javax.swing.JPanel jPanel_Resultado;
+    private javax.swing.JScrollPane jScrollPane_ExecucaoOperacoes;
+    private javax.swing.JScrollPane jScrollPane_ExpressaoComNumeros;
+    private javax.swing.JTextArea jTextArea_ExecucaoOperacoes;
+    private javax.swing.JTextArea jTextArea_ExpressaoComNumeros;
+    private javax.swing.JTextField jTextField_Resultado;
     // End of variables declaration//GEN-END:variables
 }
