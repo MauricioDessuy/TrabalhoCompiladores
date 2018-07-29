@@ -15,19 +15,34 @@ public class JCompilador extends javax.swing.JFrame {
 
     /**
      * Creates new form JCompilador
+     *
      * @param resultados contendo o resultado da operação
      */
     public JCompilador(ArrayList<Integer> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
         initComponents();
         setarValores(resultados, aceita, expressaoNumeros, expressoes, gramatica);
     }
-    
+
     public void setarValores(ArrayList<Integer> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
         for (Integer resultado : resultados) {
             jTextField_Resultado.setText(resultado.toString());
+
             for (String expressão : expressoes) {
                 jTextArea_ExecucaoOperacoes.append(expressão + "\n");
             }
+            for (String[] arrayGramatica : gramatica) {
+                for (int i = 0; i <= arrayGramatica.length - 1; i++) {
+
+                    String expressao = arrayGramatica[i];
+                    if (expressao.equals(arrayGramatica[arrayGramatica.length - 1])) {
+                        jTextArea_Gramatica.append(expressao.toString());
+                    } else {
+                        jTextArea_Gramatica.append(expressao.toString() + " | ");
+                    }
+                }
+                jTextArea_Gramatica.append("\n");
+            }
+
             jTextArea_ExpressaoComNumeros.setText(expressaoNumeros);
             jLabel_Aceita.setVisible(aceita);
         }
@@ -44,6 +59,8 @@ public class JCompilador extends javax.swing.JFrame {
 
         jPanel_Content = new javax.swing.JPanel();
         jPanel_Gramatica = new javax.swing.JPanel();
+        jScrollPane_Gramatica = new javax.swing.JScrollPane();
+        jTextArea_Gramatica = new javax.swing.JTextArea();
         jPanel_ExpressaoNumeros = new javax.swing.JPanel();
         jScrollPane_ExpressaoComNumeros = new javax.swing.JScrollPane();
         jTextArea_ExpressaoComNumeros = new javax.swing.JTextArea();
@@ -60,7 +77,15 @@ public class JCompilador extends javax.swing.JFrame {
 
         jPanel_Content.setLayout(new javax.swing.BoxLayout(jPanel_Content, javax.swing.BoxLayout.PAGE_AXIS));
 
-        jPanel_Gramatica.setLayout(new java.awt.FlowLayout(0, 5, 1));
+        jPanel_Gramatica.setBorder(javax.swing.BorderFactory.createTitledBorder("Gramática"));
+        jPanel_Gramatica.setLayout(new java.awt.BorderLayout());
+
+        jTextArea_Gramatica.setColumns(20);
+        jTextArea_Gramatica.setRows(5);
+        jScrollPane_Gramatica.setViewportView(jTextArea_Gramatica);
+
+        jPanel_Gramatica.add(jScrollPane_Gramatica, java.awt.BorderLayout.CENTER);
+
         jPanel_Content.add(jPanel_Gramatica);
 
         jPanel_ExpressaoNumeros.setBorder(javax.swing.BorderFactory.createTitledBorder("Expressão com números"));
@@ -99,12 +124,13 @@ public class JCompilador extends javax.swing.JFrame {
 
         jPanel_Buttons.setLayout(new java.awt.FlowLayout(1, 5, 1));
 
+        jLabel_Aceita.setForeground(new java.awt.Color(0, 153, 51));
         jLabel_Aceita.setText("Aceita");
         jPanel_Buttons.add(jLabel_Aceita);
 
         getContentPane().add(jPanel_Buttons, java.awt.BorderLayout.SOUTH);
 
-        setSize(new java.awt.Dimension(416, 339));
+        setSize(new java.awt.Dimension(774, 522));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -154,8 +180,10 @@ public class JCompilador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_Resultado;
     private javax.swing.JScrollPane jScrollPane_ExecucaoOperacoes;
     private javax.swing.JScrollPane jScrollPane_ExpressaoComNumeros;
+    private javax.swing.JScrollPane jScrollPane_Gramatica;
     private javax.swing.JTextArea jTextArea_ExecucaoOperacoes;
     private javax.swing.JTextArea jTextArea_ExpressaoComNumeros;
+    private javax.swing.JTextArea jTextArea_Gramatica;
     private javax.swing.JTextField jTextField_Resultado;
     // End of variables declaration//GEN-END:variables
 }
