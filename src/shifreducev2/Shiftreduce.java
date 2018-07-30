@@ -2,6 +2,7 @@ package shifreducev2;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import javax.swing.JTextArea;
 
 /**
  *
@@ -18,10 +19,10 @@ public class Shiftreduce {
     public String pilhaNumeros_D = "";
     public String[] vetorNumeros_E;
     public String[] vetorNumeros_D;
-    private ArrayList<Integer> listaNumeros_D = new ArrayList();
-    private ArrayList<Integer> listaNumeros_E = new ArrayList();
-    private static ArrayList<String> expressoes = new ArrayList();
-
+    public ArrayList<Integer> listaNumeros_D = new ArrayList();
+    public ArrayList<Integer> listaNumeros_E = new ArrayList();
+    public static ArrayList<String> expressoes = new ArrayList();
+    
     public void transfere() {
         if (pilha_D.length() > 0) {
             String valorTransferido = pilha_D.substring(0, 1);
@@ -74,11 +75,11 @@ public class Shiftreduce {
     }
 
     public void calcularOperacoes(String expressao) {
-        System.out.println("Expressao: " + expressao);
+        //System.out.println("Expressao: " + expressao);
         expressoes.add(expressao);
         Integer primeiro = listaNumeros_E.get(listaNumeros_E.size() - 2);
         Integer segundo = listaNumeros_E.get(listaNumeros_E.size() - 1);
-        System.out.println("Lista antes: " + listaNumeros_E);
+        //System.out.println("Lista antes: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
 //        System.out.println("Lista dps primeira remocao: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
@@ -102,7 +103,7 @@ public class Shiftreduce {
                 listaNumeros_E.add(resultado);
                 break;
         }
-        System.out.println("Lista dps add result: " + listaNumeros_E);
+        //System.out.println("Lista dps add result: " + listaNumeros_E);
     }
     
     public boolean tenta_reduzir() {
@@ -140,7 +141,7 @@ public class Shiftreduce {
 
     }
 
-    private void trocarNumerosPorId(String expressao, Shiftreduce sr) {
+    public void trocarNumerosPorId(String expressao, Shiftreduce sr) {
         char[] letras = expressao.toCharArray();
         for (char letra : letras) {
             if (Character.isDigit(letra)) {
@@ -170,12 +171,12 @@ public class Shiftreduce {
             sr.pilhaNumeros_D = "";
             sr.trocarNumerosPorId(expr, sr);
             if (sr.shiftreduce()) {
-                System.out.println("Resultado: " + sr.listaNumeros_E);
-                System.out.println("aceita!!!");
+                //System.out.println("Resultado: " + sr.listaNumeros_E);
+                //System.out.println("aceita!!!");
                 JCompilador jCompilador = new JCompilador(sr.listaNumeros_E, aceita, expr, expressoes, sr.gramatica);
                 jCompilador.setVisible(true);
             } else {
-                System.out.println("rejeita!!!");
+                //System.out.println("rejeita!!!");
             }
         }
     }

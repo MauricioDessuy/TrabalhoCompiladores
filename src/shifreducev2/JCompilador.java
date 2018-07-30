@@ -6,6 +6,7 @@
 package shifreducev2;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,6 +18,10 @@ public class JCompilador extends javax.swing.JFrame {
      * Creates new form JCompilador
      *
      * @param resultados contendo o resultado da operação
+     * @param aceita
+     * @param expressaoNumeros
+     * @param expressoes
+     * @param gramatica
      */
     public JCompilador(ArrayList<Integer> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
         initComponents();
@@ -45,9 +50,38 @@ public class JCompilador extends javax.swing.JFrame {
 
             jTextArea_ExpressaoComNumeros.setText(expressaoNumeros);
             jLabel_Aceita.setVisible(aceita);
+            jLabel_Rejeitada.setVisible(!aceita);
         }
     }
 
+    public void executarOperacoes() {
+        boolean aceita = true;
+        String expr = jTextArea_ExpressaoComNumeros.getText();
+        Lexico lexico = new Lexico(expr);
+        String expressao = lexico.analise();
+        if (expressao.length() > 0) {
+            Shiftreduce sr = new Shiftreduce();
+            sr.expressoes = new ArrayList();
+            sr.pilha_E = "";
+            sr.pilha_D = expressao;
+            sr.pilhaNumeros_E = "";
+            sr.pilhaNumeros_D = "";
+            sr.trocarNumerosPorId(expr, sr);
+            jTextArea_Gramatica.setText("");
+            jTextArea_ExecucaoOperacoes.setText("");
+            if (sr.shiftreduce()) {
+                setarValores(sr.listaNumeros_E, aceita, expr, sr.expressoes, sr.gramatica);
+            } else {
+                jTextField_Resultado.setText("");
+                jLabel_Rejeitada.setVisible(true);
+                jLabel_Aceita.setVisible(false);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Expressao incorreta.");
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -71,7 +105,9 @@ public class JCompilador extends javax.swing.JFrame {
         jLabel_Resultado = new javax.swing.JLabel();
         jTextField_Resultado = new javax.swing.JTextField();
         jPanel_Buttons = new javax.swing.JPanel();
+        jButton_Calcular = new javax.swing.JButton();
         jLabel_Aceita = new javax.swing.JLabel();
+        jLabel_Rejeitada = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +116,7 @@ public class JCompilador extends javax.swing.JFrame {
         jPanel_Gramatica.setBorder(javax.swing.BorderFactory.createTitledBorder("Gramática"));
         jPanel_Gramatica.setLayout(new java.awt.BorderLayout());
 
+        jTextArea_Gramatica.setEditable(false);
         jTextArea_Gramatica.setColumns(20);
         jTextArea_Gramatica.setRows(5);
         jScrollPane_Gramatica.setViewportView(jTextArea_Gramatica);
@@ -110,7 +147,7 @@ public class JCompilador extends javax.swing.JFrame {
 
         jPanel_Content.add(jPanel_ExecucaoOperacoes);
 
-        jPanel_Resultado.setLayout(new java.awt.FlowLayout(0, 5, 1));
+        jPanel_Resultado.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 1));
 
         jLabel_Resultado.setText("Resultado:");
         jPanel_Resultado.add(jLabel_Resultado);
@@ -122,17 +159,33 @@ public class JCompilador extends javax.swing.JFrame {
 
         getContentPane().add(jPanel_Content, java.awt.BorderLayout.CENTER);
 
-        jPanel_Buttons.setLayout(new java.awt.FlowLayout(1, 5, 1));
+        jPanel_Buttons.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 1));
+
+        jButton_Calcular.setText("Calcular");
+        jButton_Calcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_CalcularActionPerformed(evt);
+            }
+        });
+        jPanel_Buttons.add(jButton_Calcular);
 
         jLabel_Aceita.setForeground(new java.awt.Color(0, 153, 51));
         jLabel_Aceita.setText("Aceita");
         jPanel_Buttons.add(jLabel_Aceita);
+
+        jLabel_Rejeitada.setForeground(new java.awt.Color(255, 12, 0));
+        jLabel_Rejeitada.setText("Rejeitada");
+        jPanel_Buttons.add(jLabel_Rejeitada);
 
         getContentPane().add(jPanel_Buttons, java.awt.BorderLayout.SOUTH);
 
         setSize(new java.awt.Dimension(774, 522));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton_CalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CalcularActionPerformed
+        executarOperacoes();
+    }//GEN-LAST:event_jButton_CalcularActionPerformed
 
     /**
      * @param args the command line arguments
@@ -170,7 +223,9 @@ public class JCompilador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_Calcular;
     private javax.swing.JLabel jLabel_Aceita;
+    private javax.swing.JLabel jLabel_Rejeitada;
     private javax.swing.JLabel jLabel_Resultado;
     private javax.swing.JPanel jPanel_Buttons;
     private javax.swing.JPanel jPanel_Content;
