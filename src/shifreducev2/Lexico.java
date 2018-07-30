@@ -82,7 +82,8 @@ public class Lexico {
     public String reconhece_operador() {
         String res = "";
         String s = fonte.substring(0, 1);
-        if (s.equals("+") || s.equals("*") || s.equals("(") || s.equals(")") || s.equals("-") || s.equals("/")) {
+        if (s.equals("+") || s.equals("*") || s.equals("(") || s.equals(")") || s.equals("-") || s.equals("/") 
+                || s.equals("v") || s.equals("^")) {
             res += s;
             fonte = fonte.substring(1);
             return s;

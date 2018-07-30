@@ -12,15 +12,16 @@ public class Shiftreduce {
 
     public String[][] gramatica = {{"E", "E+T", "E-T", "T"},
     {"T", "T*F", "T/F", "F"},
-    {"F", "(E)", "i"}};
+    {"F", "F^G", "FvG", "G"},
+    {"G", "(E)", "i"}};
     public String pilha_E = "";
     public String pilha_D = "i*i";
     public String pilhaNumeros_E = "";
     public String pilhaNumeros_D = "";
     public String[] vetorNumeros_E;
     public String[] vetorNumeros_D;
-    public ArrayList<Integer> listaNumeros_D = new ArrayList();
-    public ArrayList<Integer> listaNumeros_E = new ArrayList();
+    public ArrayList<Double> listaNumeros_D = new ArrayList();
+    public ArrayList<Double> listaNumeros_E = new ArrayList();
     public static ArrayList<String> expressoes = new ArrayList();
     
     public void transfere() {
@@ -29,7 +30,7 @@ public class Shiftreduce {
             pilha_E = pilha_E + valorTransferido;
             pilha_D = pilha_D.substring(1);
             if (!listaNumeros_D.isEmpty() && valorTransferido.equals("i")) {
-                Integer numero = listaNumeros_D.get(0);
+                Double numero = listaNumeros_D.get(0);
                 listaNumeros_E.add(numero);
                 listaNumeros_D.remove(0);
             }
@@ -72,19 +73,20 @@ public class Shiftreduce {
             }
         }
         return res;
+        
     }
 
     public void calcularOperacoes(String expressao) {
         //System.out.println("Expressao: " + expressao);
         expressoes.add(expressao);
-        Integer primeiro = listaNumeros_E.get(listaNumeros_E.size() - 2);
-        Integer segundo = listaNumeros_E.get(listaNumeros_E.size() - 1);
+        Double primeiro = listaNumeros_E.get(listaNumeros_E.size() - 2);
+        Double segundo = listaNumeros_E.get(listaNumeros_E.size() - 1);
         //System.out.println("Lista antes: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
 //        System.out.println("Lista dps primeira remocao: " + listaNumeros_E);
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
 //        System.out.println("Lista dps segunda remocao: " + listaNumeros_E);
-        Integer resultado = 0;
+        Double resultado = 0.0;
         switch (expressao.charAt(1)) {
             case '*':
                 resultado = primeiro * segundo;
@@ -100,6 +102,14 @@ public class Shiftreduce {
                 break;
             case '/':
                 resultado = primeiro / segundo;
+                listaNumeros_E.add(resultado);
+                break;
+            case '^':
+                resultado = Math.pow(primeiro, segundo);
+                listaNumeros_E.add(resultado);
+                break;
+            case 'v':
+                resultado = Math.pow(primeiro, 1/segundo);
                 listaNumeros_E.add(resultado);
                 break;
         }
@@ -154,7 +164,7 @@ public class Shiftreduce {
         }
         sr.vetorNumeros_D = sr.pilhaNumeros_D.split(Pattern.quote("|"));
         for (String vetorNumero : sr.vetorNumeros_D) {
-            listaNumeros_D.add(Integer.valueOf(vetorNumero));
+            listaNumeros_D.add(Double.valueOf(vetorNumero));
         }
     }
 
