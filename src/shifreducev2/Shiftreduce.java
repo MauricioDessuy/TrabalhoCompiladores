@@ -89,25 +89,7 @@ public class Shiftreduce {
         listaNumeros_E.remove(listaNumeros_E.size() - 1);
 //        System.out.println("Lista dps segunda remocao: " + listaNumeros_E);
         Double resultado = 0.0;
-//        if (expressao.contains("*")) {
-//            resultado = primeiro * segundo;
-//            listaNumeros_E.add(resultado);
-//        } else if (expressao.contains("/")) {
-//            resultado = primeiro / segundo;
-//            listaNumeros_E.add(resultado);
-//        } else if (expressao.contains("+")) {
-//            resultado = primeiro + segundo;
-//            listaNumeros_E.add(resultado);
-//        } else if (expressao.contains("-")) {
-//            resultado = primeiro - segundo;
-//            listaNumeros_E.add(resultado);
-//        } else if (expressao.contains("v")) {
-//            resultado = Math.pow(primeiro, 1 / segundo);
-//            listaNumeros_E.add(resultado);
-//        } else if (expressao.contains("^")) {
-//            resultado = Math.pow(primeiro, segundo);
-//            listaNumeros_E.add(resultado);
-//        }
+
         switch (expressao.charAt(1)) {
             
             case '*':
@@ -175,8 +157,9 @@ public class Shiftreduce {
 
     public void trocarNumerosPorId(String expressao, Shiftreduce sr) {
         char[] letras = expressao.toCharArray();
+
         for (char letra : letras) {
-            if (Character.isDigit(letra)) {
+            if (Character.isDigit(letra) || letra == '.') {
                 sr.pilhaNumeros_D += letra;
             } else {
                 if (!sr.pilhaNumeros_D.endsWith("|") && !sr.pilhaNumeros_D.isEmpty()) {

@@ -77,11 +77,14 @@ public class JCompilador extends javax.swing.JFrame {
                 jLabel_Aceita.setVisible(false);
             }
         } else {
+            jLabel_Rejeitada.setVisible(true);
+            jLabel_Aceita.setVisible(false);
             JOptionPane.showMessageDialog(null, "Expressao incorreta.");
+
         }
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
