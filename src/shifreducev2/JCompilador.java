@@ -31,7 +31,7 @@ public class JCompilador extends javax.swing.JFrame {
     public void setarValores(ArrayList<Double> resultados, boolean aceita, String expressaoNumeros, ArrayList<String> expressoes, String[][] gramatica) {
         for (Double resultado : resultados) {
             jTextField_Resultado.setText(resultado.toString());
-
+            //jTextArea_ExecucaoOperacoes.setText("");
             for (String expressão : expressoes) {
                 jTextArea_ExecucaoOperacoes.append(expressão + "\n");
             }
@@ -140,6 +140,7 @@ public class JCompilador extends javax.swing.JFrame {
         jPanel_ExecucaoOperacoes.setLayout(new java.awt.BorderLayout());
 
         jTextArea_ExecucaoOperacoes.setColumns(20);
+        jTextArea_ExecucaoOperacoes.setEditable(false);
         jTextArea_ExecucaoOperacoes.setRows(5);
         jScrollPane_ExecucaoOperacoes.setViewportView(jTextArea_ExecucaoOperacoes);
 
@@ -153,6 +154,7 @@ public class JCompilador extends javax.swing.JFrame {
         jPanel_Resultado.add(jLabel_Resultado);
 
         jTextField_Resultado.setPreferredSize(new java.awt.Dimension(120, 20));
+        jTextField_Resultado.setEditable(false);
         jPanel_Resultado.add(jTextField_Resultado);
 
         jPanel_Content.add(jPanel_Resultado);
